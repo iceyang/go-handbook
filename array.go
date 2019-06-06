@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 )
 
 type Student struct {
@@ -11,24 +10,24 @@ type Student struct {
 }
 
 func arrayExample() {
+	// declare a array variable
 	var intArr [10]int
 	intArr[4] = 10
-	fmt.Println("intArr:", intArr)
 
-	numbers := [5]int{1, 2, 3, 4, 5}
-	fmt.Println("numbers:", numbers)
+	// initialize array
+	_ = [5]int{1, 2, 3, 4, 5}
 
-	var studentArr [4]Student
-	fmt.Println("studentArr:", studentArr)
+	// struct array
+	var _ [4]Student
 
-	var twoDimention [5][5]int
-	fmt.Println("twoDimention:", twoDimention)
+	// two dimentional array
+	var _ [5][5]int
 
-	names := [5]string{0: "Andy", 2: "Tim", 1: "Jason"}
-	fmt.Println("names:", names)
+	// using index to initialize
+	_ = [5]string{0: "Andy", 2: "Tim", 1: "Jason"}
 }
 
 func typeOf() {
-	fmt.Println("type of [...]int{1,2,3,4,5}: ", reflect.TypeOf([...]int{1, 2, 3, 4, 5}))
-	fmt.Println("type of []int{1,2,3,4,5}: ", reflect.TypeOf([]int{1, 2, 3, 4, 5}))
+	fmt.Printf("type of [...]int{1,2,3,4,5}: %T\n", [...]int{1, 2, 3, 4, 5})
+	fmt.Printf("type of []int{1,2,3,4,5}: %T\n", []int{1, 2, 3, 4, 5})
 }
