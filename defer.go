@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func main() {
+func deferExample() {
 	defer func() {
 		fmt.Println("Do something finally.")
 	}()
