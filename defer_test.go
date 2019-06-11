@@ -4,6 +4,9 @@ import (
 	"testing"
 )
 
-func TestDeferExample(t *testing.T) {
-	deferExample()
+func TestDefer(t *testing.T) {
+	defer func() {
+		t.Log("Do something finally.")
+	}()
+	t.Log("here we go.")
 }
