@@ -1,4 +1,4 @@
-package router
+package engine
 
 import (
 	"log"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/iceyang/m-go-cookbook/web/internal"
-	"github.com/iceyang/m-go-cookbook/web/internal/ctrl"
 )
 
 func responseHandler(c *gin.Context) {
@@ -48,27 +47,4 @@ func recovery(c *gin.Context) {
 		}
 	}()
 	c.Next()
-}
-
-func Default() *gin.Engine {
-	router := gin.New()
-	if gin.Mode() != gin.ReleaseMode {
-		router.Use(gin.Logger())
-	}
-	router.Use(recovery)
-	router.Use(responseHandler)
-
-	router.NoRoute(func(c *gin.Context) {
-		c.AbortWithStatus(http.StatusNotFound)
-	})
-
-	apiGroup := router.Group("/api")
-	// ------------ example ----------------- //
-	apiGroup.POST("/examples", ctrl.Example.Create)
-	apiGroup.GET("/examples", ctrl.Example.List)
-	apiGroup.GET("/examples/empty", ctrl.Example.EmptyBody)
-	apiGroup.GET("/examples/404", ctrl.Example.With404)
-	// ------------ example ----------------- //
-
-	return router
 }
