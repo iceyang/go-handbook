@@ -2,6 +2,11 @@ package main
 
 import "testing"
 
+type Student struct {
+	Name string
+	No   int
+}
+
 func TestMap(t *testing.T) {
 	_ = map[string]string{}
 
