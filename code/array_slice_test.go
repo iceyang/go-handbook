@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -118,4 +119,41 @@ func TestOutOfBound(t *testing.T) {
 
 	index := 6
 	_ = arr10[index]
+}
+
+func TestComplexType(t *testing.T) {
+	// 初始化了一个二维数组
+	arr11 := [5][5]int{}
+	// 将第三行第三列赋值为1
+	arr11[2][2] = 1
+	for _, v := range arr11 {
+		t.Log(v)
+	}
+
+	slice11 := []*Student{
+		&Student{"Justin", 1},
+	}
+	t.Log("slice11[0]: ", slice11[0])
+}
+
+func TestAppendTrap(t *testing.T) {
+	slice12 := make([]int, 5, 10)
+	slice13 := append(slice12, 6)
+	slice13[0] = 1
+	// 猜猜这里会输出什么
+	fmt.Println("slice12: ", slice12)
+
+	slice14 := make([]int, 5, 10)
+	slice15 := append(slice14, 6, 7, 8, 9, 10, 11)
+	slice15[0] = 1
+	// 猜猜这里会输出什么
+	fmt.Println("slice14: ", slice14)
+
+	slice16 := make([]int, 5, 10)
+	fmt.Println("slice16: ", slice16)
+
+	slice17 := slice16[:10]
+	fmt.Println("slice17: ", slice17)
+
+	// slice18 := slice16[:11] // 这里会产生越界错误
 }
