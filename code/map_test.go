@@ -8,16 +8,28 @@ type Student struct {
 }
 
 func TestMap(t *testing.T) {
-	_ = map[string]string{}
+	var map1 map[string]int
+	t.Log(map1)
 
-	a := map[string][]int{}
-	a["test"] = []int{1, 2, 3}
+	map2 := map[string]string{}
+	map2["name"] = "Bob"
+	t.Log(map2)
 
-	studentMap := map[string]Student{}
-	studentMap["justin"] = Student{
-		Name: "Justin",
-		No:   1,
+	val, ok := map2["name2"]
+	t.Log(ok)
+	t.Log(val)
+
+	map3 := map[string]Student{}
+	v, _ := map3["name"]
+	t.Log(v)
+
+	map4 := map[string]int{
+		"a": 1,
+		"b": 2,
+		"c": 3,
 	}
 
-	t.Log(studentMap["justin"])
+	for k, v := range map4 {
+		t.Log(k, v)
+	}
 }
