@@ -19,17 +19,22 @@ func TestMap(t *testing.T) {
 	t.Log(ok)
 	t.Log(val)
 
-	map3 := map[string]Student{}
-	v, _ := map3["name"]
+	map3 := map[int]string{
+		1: "one",
+	}
+	t.Log(map3)
+
+	map4 := map[string]Student{}
+	v, _ := map4["name"]
 	t.Log(v)
 
-	map4 := map[string]int{
+	map5 := map[string]int{
 		"a": 1,
 		"b": 2,
 		"c": 3,
 	}
 
-	for k, v := range map4 {
+	for k, v := range map5 {
 		t.Log(k, v)
 	}
 }
