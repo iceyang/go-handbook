@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+type Student struct {
+	Name string
+	No   int
+}
+
 func TestTypeOf(t *testing.T) {
 	t.Logf("type of [...]int{1,2,3,4,5}: %T\n", [...]int{1, 2, 3, 4, 5})
 	t.Logf("type of []int{1,2,3,4,5}: %T\n", []int{1, 2, 3, 4, 5})
@@ -115,10 +120,12 @@ func TestRange(t *testing.T) {
 
 func TestOutOfBound(t *testing.T) {
 	arr10 := [5]int{1, 2, 3, 4, 5}
+	t.Log(arr10)
 	// _ = arr10[6] // 编译不通过
 
-	index := 6
-	_ = arr10[index]
+	// 打开注释会发生运行时错误
+	// index := 6
+	// _ = arr10[index]
 }
 
 func TestComplexType(t *testing.T) {
