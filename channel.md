@@ -86,7 +86,7 @@ chan2 := make(<-chan int, 5)
 比如，下面的方法，它限制了变量 ch 只能接收，不能发送
 ```Go
 func receivedOnlyChannel(ch <-chan int) {
-	fmt.Println(<-ch)
+        fmt.Println(<-ch)
 }
 ```
 
@@ -107,6 +107,61 @@ receivedOnlyChannel(chan3)
 - 当通道关闭后，对其进行发送操作，会引发panic；
 - 当我们只有一个goroutine，而通道发生了阻塞，会引发panic：`all goroutines are asleep`，程序死锁。
 
+## 使用range获取通道元素
+
+像我们在遍历其他容器一样，我们可以使用关键字`range`，对通道的元素进行顺序接收：
+
+```Go
+chan1 := make(chan int, 5)
+chan1 <- 1
+chan1 <- 2
+chan1 <- 3
+close(chan1)
+for elem := range chan1 {
+        fmt.Println(elem)
+}
+```
+
+我们需要特别注意第5行的`close`操作，如果我们只有一个`goroutine`时，不关闭`chan1`将会造成`for`循环的阻塞，导致`panic`发生。
+
 ## select语句
 
-TODO
+针对通道的接收，Go 语言提供了`select`语句，它的使用类似于`switch`语句，不同的是，它接收的是通道参数。先看下面一个例子：
+
+```Go
+chan1 := make(chan int, 1)
+
+chan2 := make(chan int, 1)
+chan2 <- 1
+
+var chan3 chan int
+
+select {
+case <-chan1:
+        t.Log("receive from chan1")
+case elem := <-chan2:
+        t.Log("receive from chan2, elem:", elem)
+case <-chan3:
+        t.Log("receive from chan3")
+default:
+        t.Log("default case")
+}
+```
+
+我们定义了3个通道：chan1、chan2、chan3，其中只有chan2是有元素的，chan1没有元素存在，而chan3只是声明而没有初始化，是个nil值。
+
+对于`select`来说，它会选择一个满足条件的分支进行执行，分支的`case`表达式是顺序求值的，那么会出现下面的情况：
+
+1. 对所有`case`表达式按顺序执行求值操作，如果当前`case`是阻塞的，则认为是不满足条件；
+2. 假设只有一个`case`满足条件，则执行当前`case`分支，如果不止一个`case`表达式满足条件，则采用伪随机算法选择其中一个执行；
+3. 当所有`case`表达式都不满足条件时：
+    1. 如果存在`default`分支，则执行`default`分支；
+    2. 否则，`select`语句被阻塞，直到有任意一个分支满足为止。
+
+> 当我们需要对通道不断进行获取时，可以将`for`语句与`select`语句搭配使用，但需要注意的时，我们需要通过接收通道时的第二个参数，主动感知通道是否已关闭，来做出相应的动作，让我们的程序逻辑更加合理。
+
+## 总结
+
+本文是对 Go 语言通道 - Channel 的使用说明，包括如何初始化和使用、通道的特性、使用注意事项，以及如何搭配`range`和`select`使用，其中的 demo 可以在 [此处](https://github.com/iceyang/go-handbook/tree/master/code/channel) 获得。
+
+如果有错误或补充，欢迎留言指正。

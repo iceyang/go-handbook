@@ -83,3 +83,35 @@ func TestOneWayChannel(t *testing.T) {
 func receivedOnlyChannel(ch <-chan int) {
 	fmt.Println(<-ch)
 }
+
+func TestRangeChannel(t *testing.T) {
+	chan1 := make(chan int, 5)
+	chan1 <- 1
+	chan1 <- 2
+	chan1 <- 3
+	// it would be blocked if we didn't close chan1
+	close(chan1)
+	for elem := range chan1 {
+		t.Log(elem)
+	}
+}
+
+func TestSelect(t *testing.T) {
+	chan1 := make(chan int, 1)
+
+	chan2 := make(chan int, 1)
+	chan2 <- 1
+
+	var chan3 chan int
+
+	select {
+	case <-chan1:
+		t.Log("receive from chan1")
+	case elem := <-chan2:
+		t.Log("receive from chan2, elem:", elem)
+	case <-chan3:
+		t.Log("receive from chan3")
+	default:
+		t.Log("default case")
+	}
+}
