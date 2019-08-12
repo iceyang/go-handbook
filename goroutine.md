@@ -90,7 +90,11 @@ func main() {
 
 ## Go 如何调度 goroutine
 
-TODO
+`Go`调度协程有三个主要元素：
+
+- G: goroutine
+- P: processor
+- M: machine
 
 ## 协程 VS 线程
 
