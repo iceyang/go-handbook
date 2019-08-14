@@ -107,9 +107,13 @@ func main() {
 
 `Go语言`调度器有三个主要元素：
 
+![三个主要元素](img/goroutine_main_entities.jpg)
+
 - M: 代表的是操作系统线程，在`runtime`代码中，它用`M`代表`machine`；
 - G: 包含着调度协程需要的信息，包括堆栈、指令指针等等，在`runtime`代码中，它用`G`代表`goroutine`；
 - P: 代表调度的上下文，有了它才有了从`N:1`模型到`M:N`的转变，在`runtime`代码中，它用`P`代表`processor`。
+
+
 
 ## 协程 VS 线程
 
