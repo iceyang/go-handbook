@@ -145,4 +145,4 @@ M、P、G 在很多情况下都不只有一个，Go 调度器会保证程序有�
 
 ## 参考
 
-[go-schduler](http://morsmachine.dk/go-scheduler)
+[The Go scheduler](http://morsmachine.dk/go-scheduler)
