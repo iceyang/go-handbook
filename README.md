@@ -6,3 +6,4 @@ Catalog:
 * [Map](map.md)
 * [Channel](channel.md)
 * [Go Routine](goroutine.md)
+* [Building Web Service](building-webservice-with-gin.md)
