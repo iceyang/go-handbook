@@ -324,3 +324,7 @@ GET /api/users/mobile/:mobile
 2. 某路由通配符覆盖了其他路由
 
 > 这种冲突在其他语言和框架可能并不会出现，这个时候，我们只能对API进行调整。
+
+## 示例代码
+
+关于上述的项目结构，我存放在了[gin-exam](https://github.com/iceyang/gin-exam)，可以前往查看。
