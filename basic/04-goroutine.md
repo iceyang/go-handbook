@@ -109,7 +109,7 @@ func main() {
 
 `Go`调度器有三个主要元素：
 
-![三个主要元素](img/goroutine_main_entities.jpg)
+![三个主要元素](../img/goroutine_main_entities.jpg)
 
 - M: 代表的是操作系统线程，在`runtime`代码中，它用`M`代表`machine`；
 - G: 包含着调度协程需要的信息，包括堆栈、指令指针等等，在`runtime`代码中，它用`G`代表`goroutine`；
