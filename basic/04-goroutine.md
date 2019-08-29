@@ -160,6 +160,8 @@ func main() {
 
 协程与通道的结合，才是`Go并发模型CSP`的核心，在后续的文章中将会进行介绍。
 
+本文的具体代码可以在 [此处](../code/goroutine) 获得。
+
 ## 参考
 
 [The Go scheduler](http://morsmachine.dk/go-scheduler)

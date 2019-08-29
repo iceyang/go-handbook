@@ -162,6 +162,6 @@ default:
 
 ## 总结
 
-本文是对 Go 语言通道 - Channel 的使用说明，包括如何初始化和使用、通道的特性、使用注意事项，以及如何搭配`range`和`select`使用，其中的 demo 可以在 [此处](https://github.com/iceyang/go-handbook/tree/master/code/channel) 获得。
+本文是对 Go 语言通道 - Channel 的使用说明，包括如何初始化和使用、通道的特性、使用注意事项，以及如何搭配`range`和`select`使用，其中的 demo 可以在 [此处](../code/channel) 获得。
 
 如果有错误或补充，欢迎留言指正。

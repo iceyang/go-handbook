@@ -1,4 +1,4 @@
-The notes of My Golang Learning.
+The notes of my Golang learning.
 
 Catalog:
 
@@ -7,7 +7,8 @@ Basic Chapter
 * [Array & Slice](basic/01-array-slice.md)
 * [Map](basic/02-map.md)
 * [Channel](basic/03-channel.md)
-* [Go Routine](basic/04-goroutine.md)
+* [Goroutine](basic/04-goroutine.md)
+* [Goroutine With Channel](basic/05-goroutine-with-channel.md)
 
 Application Chapter
 
