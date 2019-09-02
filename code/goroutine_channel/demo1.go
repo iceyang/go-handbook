@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func producer(queue chan<- int) {
 	for i := 0; i < 10; i++ {
@@ -12,6 +15,7 @@ func producer(queue chan<- int) {
 func consumer(queue <-chan int, finish chan int) {
 	for v := range queue {
 		fmt.Printf("Get value: %d \n", v)
+		time.Sleep(time.Second)
 	}
 	finish <- 1
 }
