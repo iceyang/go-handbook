@@ -9,6 +9,7 @@ Basic Chapter
 * [Channel](basic/03-channel.md)
 * [Goroutine](basic/04-goroutine.md)
 * [Goroutine With Channel](basic/05-goroutine-with-channel.md)
+* [Error Handling](basic/06-error-handling.md)
 
 Application Chapter
 
