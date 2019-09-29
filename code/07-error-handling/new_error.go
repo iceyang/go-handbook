@@ -13,10 +13,13 @@ func division(divisor, dividend int) (int, error) {
 }
 
 func main() {
-	if res, err := division(10, 5); err != nil {
+	if res, err := division(10, 5); err == nil {
 		fmt.Println(res)
 	}
-	if res, err := division(10, 0); err != nil {
+	res, err := division(10, 0)
+	if err == nil {
 		fmt.Println(res)
+	} else {
+		fmt.Println(err)
 	}
 }

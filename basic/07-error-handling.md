@@ -2,11 +2,23 @@
 
 在实际编程中，会出现各种各样的错误，对于预料之中的错误，我们可以优雅的处理，让程序平滑运行。而异常情况的错误，我们也可以预留保护机制，保证程序不会异常退出。
 
-## error类型
+## 内置的接口类型：error
 
-在 Go 语言里，我们也可以利用提供的错误类型error来对错误进行处理。
+在 Go 语言里，我们可以利用提供的错误类型`error`来自定义错误。
 
-error 是一个接口类型，是 Go 的内建类型，我们可以通过`errors.New()`来生成一个error，比如：
+error 是一个接口类型，是 Go 的内建类型，它的定义是：
+
+```Go
+// The error built-in interface type is the conventional interface for
+// representing an error condition, with the nil value representing no error.
+type error interface {
+        Error() string
+}
+```
+
+实现了`Error() string`方法的类型，都属于error接口类型。
+
+当我们简单使用时，可以通过`errors.New()`来生成一个error，比如：
 
 ```Go
 func division(divisor, dividend int) (int, error) {
@@ -17,12 +29,15 @@ func division(divisor, dividend int) (int, error) {
 }
 
 func main() {
-	if res, err := division(10, 5); err != nil {
-		fmt.Println(res)
-	}
-	if res, err := division(10, 0); err != nil {
-		fmt.Println(res)
-	}
+        if res, err := division(10, 5); err == nil {
+                fmt.Println(res)
+        }
+        res, err := division(10, 0)
+        if err == nil {
+                fmt.Println(res)
+        } else {
+                fmt.Println(err)
+        }
 }
 ```
 
@@ -34,6 +49,28 @@ func main() {
 
 > 假如大家写过使用Promise之前的js，代码使用回调进行信息的传递，会有熟悉的感觉，通常会将err作为回调函数结果的第一位，作为约定的规范来处理。
 
+### errors.New的实现
+
+errors.New放在 Go errors 包中，下面是它的具体实现：
+
+```Go
+// New returns an error that formats as the given text.
+func New(text string) error {
+	return &errorString{text}
+}
+
+// errorString is a trivial implementation of error.
+type errorString struct {
+	s string
+}
+
+func (e *errorString) Error() string {
+	return e.s
+}
+```
+
+实现很简单，返回了一个内置结构`errorString`的指针。而`errorString`结构只包含了一个字符串属性，记录了错误的信息，实现的`Error`方法是将该字符串返回。
+
 ## 如何对错误进行处理
 
 通过前文我们知道，通常函数出现了错误，会将error作为返回值给到调用者，调用者接收到err不为nil时，需要做出相应的处理。通常的做法有：
@@ -43,7 +80,6 @@ func main() {
 3. 当error的类型完全未知时，只能通过错误信息做判断。
 
 上面的描述相对来说比较抽象，我们用具体的例子来做解释。
-
 
 ## 工具包pkg/errors的使用
 
