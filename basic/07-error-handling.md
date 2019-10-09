@@ -81,6 +81,13 @@ func (e *errorString) Error() string {
 
 上面的描述相对来说比较抽象，我们用具体的例子来做解释。
 
+### 确定error的类型值
+
+因为`error`是一个接口类型，只要实现了`Error() string`方法的实体，都可以被当成error。
+当我们调用的方法，可以的确定它可能抛出什么类型的`error`时，可以用`switch`语句进行处理。
+
+
+
 ## 工具包pkg/errors的使用
 
 TODO
