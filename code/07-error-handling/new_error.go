@@ -12,7 +12,7 @@ func division(divisor, dividend int) (int, error) {
 	return divisor / dividend, nil
 }
 
-func demo1() {
+func newErrorDemo() {
 	if res, err := division(10, 5); err == nil {
 		fmt.Println(res)
 	}

@@ -17,7 +17,8 @@ func (ErrorTwo) Error() string {
 	return "This is Error Two"
 }
 
-func handleErrorWithType(err error) {
+func handleErrorWithType1(err error) {
+	fmt.Print("handleErrorWithType1: ")
 	switch err.(type) {
 	case *ErrorOne:
 		fmt.Println("err is ErrorOne")
@@ -36,12 +37,12 @@ func doSomething() error {
 	return nil
 }
 
-func demo2() {
+func handleErrorDemo1() {
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < 10; i++ {
 		if err := doSomething(); err != nil {
-			handleErrorWithType(err)
+			handleErrorWithType1(err)
 		} else {
 			fmt.Println("There'is no error")
 		}
