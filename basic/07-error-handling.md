@@ -81,12 +81,61 @@ func (e *errorString) Error() string {
 
 上面的描述相对来说比较抽象，我们用具体的例子来做解释。
 
-### 确定error的类型值
+### 当确定error的类型值时
 
 因为`error`是一个接口类型，只要实现了`Error() string`方法的实体，都可以被当成error。
-当我们调用的方法，可以的确定它可能抛出什么类型的`error`时，可以用`switch`语句进行处理。
 
+当我们调用的方法，可以确定它可能抛出什么类型的`error`时，可以用`switch`语句配合`.(type)`进行处理。
 
+我们自定义了两个错误类型：ErrorOne 和 ErrorTwo，然后通过swtich语句进行判断：
+
+```Go
+type ErrorOne struct{}
+type ErrorTwo struct{}
+
+func (ErrorOne) Error() string {
+        return "This is Error One"
+}
+
+func (ErrorTwo) Error() string {
+        return "This is Error Two"
+}
+
+func handleErrorWithType(err error) {
+        switch err.(type) {
+        case *ErrorOne:
+                fmt.Println("err is ErrorOne")
+        case *ErrorTwo:
+                fmt.Println("err is ErrorTwo")
+        }
+}
+
+func doSomething() error {
+        num := rand.Intn(10)
+        if num > 5 {
+                return &ErrorOne{}
+        } else if num < 5 {
+                return &ErrorTwo{}
+        }
+        return nil
+}
+
+func demo2() {
+        rand.Seed(time.Now().UnixNano())
+
+        for i := 0; i < 10; i++ {
+                if err := doSomething(); err != nil {
+                        handleErrorWithType(err)
+                } else {
+                        fmt.Println("There'is no error")
+                }
+        }
+}
+```
+
+重点在于`handleErrorWithType`方法，由于我们知道产生的错误只能是`ErrorOne`和`ErrorTwo`两种类型，所以我们可以用`switch`进行判断，然后针对性进行处理。
+
+这有点像其他语言的`try/catch`语句，当我们知道具体的类型时，可以直接指定Error的类型。
 
 ## 工具包pkg/errors的使用
 

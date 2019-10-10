@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 type ErrorOne struct{}
 type ErrorTwo struct{}
@@ -13,21 +17,33 @@ func (ErrorTwo) Error() string {
 	return "This is Error Two"
 }
 
-func checkErrorType(err error) {
+func handleErrorWithType(err error) {
 	switch err.(type) {
 	case *ErrorOne:
-		fmt.Println("ErrorOne")
+		fmt.Println("err is ErrorOne")
 	case *ErrorTwo:
-		fmt.Println("ErrorTwo")
+		fmt.Println("err is ErrorTwo")
 	}
 }
 
+func doSomething() error {
+	num := rand.Intn(10)
+	if num > 5 {
+		return &ErrorOne{}
+	} else if num < 5 {
+		return &ErrorTwo{}
+	}
+	return nil
+}
+
 func demo2() {
-	var err error
+	rand.Seed(time.Now().UnixNano())
 
-	err = &ErrorOne{}
-	checkErrorType(err)
-
-	err = &ErrorTwo{}
-	checkErrorType(err)
+	for i := 0; i < 10; i++ {
+		if err := doSomething(); err != nil {
+			handleErrorWithType(err)
+		} else {
+			fmt.Println("There'is no error")
+		}
+	}
 }
