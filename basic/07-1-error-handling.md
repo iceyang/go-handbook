@@ -226,7 +226,7 @@ func handleErrorDemo3() {
 
 ## 总结
 
-我们提到在`Go`语言中，也有内置的接口类型`error`，实现了`Error() string`方法的结构，都可以被当成`error`。
+我们提到在`Go`语言中，也有内置的接口类型`error`，实现了`Error() string`方法的类型，都可以被当成`error`。
 
 简单的`error`可以通过`Go errors`包的`New(text string)`方法生成。
 
