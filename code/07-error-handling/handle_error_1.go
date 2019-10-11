@@ -27,7 +27,7 @@ func handleErrorWithType1(err error) {
 	}
 }
 
-func doSomething() error {
+func doSomething1() error {
 	num := rand.Intn(10)
 	if num > 5 {
 		return &ErrorOne{}
@@ -41,7 +41,7 @@ func handleErrorDemo1() {
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < 10; i++ {
-		if err := doSomething(); err != nil {
+		if err := doSomething1(); err != nil {
 			handleErrorWithType1(err)
 		} else {
 			fmt.Println("There'is no error")

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
 )
 
-var errorOne = &ErrorOne{}
-var errorTwo = &ErrorTwo{}
+var errorOne = errors.New("This is Error One")
+var errorTwo = errors.New("This is Error Two")
 
 func handleErrorWithType2(err error) {
 	fmt.Print("handleErrorWithType2: ")
