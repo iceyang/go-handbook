@@ -11,6 +11,14 @@ func (p *Person) GetName() string {
 	return p.name
 }
 
+func (p *Person) SetName(name string) {
+	p.name = name
+}
+
+func (p Person) SetName2(name string) {
+	p.name = name
+}
+
 type Cat struct {
 }
 

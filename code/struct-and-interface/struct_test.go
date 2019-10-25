@@ -23,3 +23,18 @@ func TestStruct1(t *testing.T) {
 	}
 	fmt.Println(person3)
 }
+
+/**
+ * 执行结果，打印出来的是：
+ * name:
+ * SetName:  Justin
+ * SetName2:  Justin
+ */
+func TestStruct2(t *testing.T) {
+	person := Person{}
+	fmt.Println("name:", person.GetName())
+	person.SetName("Justin")
+	fmt.Println("SetName: ", person.GetName())
+	person.SetName2("Justin2")
+	fmt.Println("SetName2: ", person.GetName())
+}
