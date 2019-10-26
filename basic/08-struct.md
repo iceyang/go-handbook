@@ -4,7 +4,8 @@ Go语言也拥有struct（结构体），结构体的使用，可以让我们将
 
 结构体也可以不拥有任何字段，只拥有方法，根据具体业务场景，它有它存在的意义。
 
-## 定义结构体
+## 定义
+### 定义字段属性
 
 要定义一个结构体，可以通过关键字`type`和`struct`完成：
 
@@ -17,7 +18,7 @@ type Person struct {
 
 我们定义了一个名字为`Person`的结构体。
 
-## 定义结构体的方法
+### 定义方法
 
 ```Go
 func (p *Person) GetName() string {
@@ -84,6 +85,12 @@ func TestStruct1(t *testing.T) {
 还记得上面我们为`Person`定义了两个`SetName`函数，它们的区别只在于接收者是不是指针。下面是一段简单示例以及运行结果，可以看出两个方法得到的效果不同：
 
 ```Go
+/**
+ * 执行结果，打印出来的是：
+ * name:
+ * SetName:  Justin
+ * SetName2:  Justin
+ */
 func TestStruct2(t *testing.T) {
 	person := Person{}
 	fmt.Println("name:", person.GetName())
@@ -92,13 +99,6 @@ func TestStruct2(t *testing.T) {
 	person.SetName2("Justin2")
 	fmt.Println("SetName2: ", person.GetName())
 }
-
-/**
- * 执行结果，打印出来的是：
- * name:
- * SetName:  Justin
- * SetName2:  Justin
- */
 ```
 
 结果出来了，我们初始化了一个变量`person`，一开始`name`属性为默认值`''`，因为我们没有赋予初始化的值。
