@@ -6,6 +6,10 @@ import (
 )
 
 func TestStruct1(t *testing.T) {
+	// 定义初始化，数值为默认值
+	var person Person
+	fmt.Println(person)
+
 	// 通过字段名称初始化
 	person1 := Person{
 		name: "Justin",
@@ -22,6 +26,11 @@ func TestStruct1(t *testing.T) {
 		name: "Justin",
 	}
 	fmt.Println(person3)
+
+	// 使用 new() 函数初始化
+	person4 := new(Person)
+	person4.name = "Tim"
+	fmt.Println(person4)
 }
 
 /**
@@ -37,4 +46,18 @@ func TestStruct2(t *testing.T) {
 	fmt.Println("SetName: ", person.GetName())
 	person.SetName2("Justin2")
 	fmt.Println("SetName2: ", person.GetName())
+}
+
+func TestStruct3(t *testing.T) {
+	o := AnonymousField{}
+	o.int = 10
+	fmt.Println(o)
+}
+
+func TestStruct4(t *testing.T) {
+	adult := &Adult{}
+	adult.job = "salesman"
+	adult.person.name = "John"
+	adult.person.age = 25
+	fmt.Println(adult)
 }

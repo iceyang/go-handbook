@@ -19,6 +19,17 @@ func (p Person) SetName2(name string) {
 	p.name = name
 }
 
+type Adult struct {
+	job    string
+	person Person
+}
+
+type AnonymousField struct {
+	a int
+	b int
+	int
+}
+
 type Cat struct {
 }
 
