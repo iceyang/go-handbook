@@ -41,7 +41,7 @@ func (p Person) SetName2(name string) {
 > 观察两个SetName方法，它们的区别在于接收者是谁，一个是Person类型，一个是Person类型的指针。
 > 后面会说明它们会有什么不同。
 
-## 初始化结构体
+## 结构体的使用
 
 下面是使用`Person`结构体的方式：
 
