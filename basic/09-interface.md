@@ -31,4 +31,62 @@ type Stringer interface {
 2. 实现了接口的所有方法。
 
 只要同时符合上述两个条件，类型便实现了接口。
-比如我们有一个类型提供了`String() string`方法，那么它就可以被当成`Stringer`使用。
+
+还是以`Stringer`接口为例，只要类型实现了`String() string`方法，那么它就可以被当成`Stringer`使用。
+
+在`fmt`的输出中，有这么一段代码：
+
+```Go
+// If a string is acceptable according to the format, see if
+// the value satisfies one of the string-valued interfaces.
+// Println etc. set verb to %v, which is "stringable".
+switch verb {
+case 'v', 's', 'x', 'X', 'q':
+        // Is it an error or Stringer?
+        // The duplication in the bodies is necessary:
+        // setting handled and deferring catchPanic
+        // must happen before calling the method.
+        switch v := p.arg.(type) {
+        case error:
+                handled = true
+                defer p.catchPanic(p.arg, verb, "Error")
+                p.fmtString(v.Error(), verb)
+                return
+
+        case Stringer:
+                handled = true
+                defer p.catchPanic(p.arg, verb, "String")
+                p.fmtString(v.String(), verb)
+                return
+        }
+}
+```
+
+在代码中，`fmt`包通过类型判断输出的对象是否属于`Stringer`，如果是的话，会调用它的`String()`方法。
+我们现在提供`Person`类型，实现了`String() string`，看看它的效果：
+
+```Go
+type Person struct {
+	name string
+}
+
+func (person *Person) String() string {
+	return "Person: " + person.name
+}
+
+func TestFmt(t *testing.T) {
+	person := &Person{"Justin"}
+	fmt.Println(person)
+}
+```
+
+运行后能看到输出为：
+```
+Person: Justin
+```
+
+说明`Person`是被当成`Stringer`使用的。
+
+## 类型与接口的关系
+
+因为 Go 中的接口与实现是隐式关系，所以一个类型可以同时实现多个接口，而且接口之间可以完全没有关系，相互独立。
