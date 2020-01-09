@@ -164,3 +164,35 @@ func TestAppendTrap(t *testing.T) {
 
 	// slice18 := slice16[:11] // 这里会产生越界错误
 }
+
+/**
+ * Slice传入函数中，是传引用
+ */
+func setSliceValue(arr []Student) {
+	arr[0].Name = "Test"
+}
+
+func TestSliceReference(t *testing.T) {
+	arr := []Student{
+		Student{"Justin", 18},
+	}
+	fmt.Println("(Slice) Before: ", arr[0].Name)
+	setSliceValue(arr)
+	fmt.Println("(Slice) After: ", arr[0].Name)
+}
+
+/**
+ * 数组传入函数中，是拷贝
+ */
+func setArrValue(arr [1]Student) {
+	arr[0].Name = "Test"
+}
+
+func TestArrReference(t *testing.T) {
+	arr := [1]Student{
+		Student{"Justin", 18},
+	}
+	fmt.Println("(Slice) Before: ", arr[0].Name)
+	setArrValue(arr)
+	fmt.Println("(Slice) After: ", arr[0].Name)
+}
