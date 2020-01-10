@@ -14,6 +14,7 @@ func TestWaitGroup1(t *testing.T) {
 	for i := 0; i < n; i++ {
 		go func(i int) {
 			counter++
+			fmt.Println(i)
 			wg.Done()
 		}(i)
 	}
@@ -26,15 +27,17 @@ func TestWaitGroup1(t *testing.T) {
  */
 func TestWaitGroup2(t *testing.T) {
 	var wg sync.WaitGroup
-	n := 10
+	n := 1000
 	counter := 0
 	for i := 0; i < n; i++ {
+		wg.Add(1)
 		go func(i int) {
-			wg.Add(1)
 			counter++
 			wg.Done()
 		}(i)
 	}
 	wg.Wait()
-	fmt.Println("counter:", counter)
+	if counter != n {
+		t.Errorf("Not all goroutine is finished. counter=%d，expected %d", counter, n)
+	}
 }
