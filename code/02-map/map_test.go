@@ -34,6 +34,8 @@ func TestMap(t *testing.T) {
 		"c": 3,
 	}
 
+	delete(map5, "b")
+
 	for k, v := range map5 {
 		t.Log(k, v)
 	}
