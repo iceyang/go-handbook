@@ -9,12 +9,12 @@ import (
 )
 
 type Person struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type Student struct {
 	Person `bson:"inline"`
-	Num    int
+	Num    int `json:"num"`
 }
 
 func TestJsonMarshal(t *testing.T) {
