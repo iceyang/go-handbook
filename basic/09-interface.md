@@ -108,7 +108,7 @@ type Flyer interface {
 
 ### 类型断言
 
-有时候我们想把接口转换成具体的类型，可以使用类型断言：
+有时候我们想把接口转换成具体的类型或者其他接口，可以使用类型断言：
 
 ```Go
 value, ok := x.(T)
@@ -124,3 +124,70 @@ value := x.(T)
 ```
 
 转换效果与接收`ok`是一致的，不同点在于，假设转换失败，那么程序会直接`panic`。
+
+`switch`还可以配合`.(type)`一起使用，针对具体的类型，做出不同的逻辑处理。
+
+```Go
+func assertType(i interface{}) {
+        switch i.(type) {
+        case string:
+                fmt.Println("Type is string")
+        case error:
+                fmt.Println("Type is error")
+        default:
+                fmt.Println("Unknown type")
+        }
+}
+```
+
+## 接口嵌套
+
+类型可以嵌套，接口也可以嵌套。
+比如Go语言的io包中，有这么几个接口：
+
+```Go
+type Reader interface {
+	Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+	Write(p []byte) (n int, err error)
+}
+
+type Closer interface {
+	Close() error
+}
+```
+
+它们可以组合成各种各样的接口：
+
+```Go
+// ReadWriter is the interface that groups the basic Read and Write methods.
+type ReadWriter interface {
+	Reader
+	Writer
+}
+
+// ReadCloser is the interface that groups the basic Read and Close methods.
+type ReadCloser interface {
+	Reader
+	Closer
+}
+
+// WriteCloser is the interface that groups the basic Write and Close methods.
+type WriteCloser interface {
+	Writer
+	Closer
+}
+
+// ReadWriteCloser is the interface that groups the basic Read, Write and Close methods.
+type ReadWriteCloser interface {
+	Reader
+	Writer
+	Closer
+}
+
+// ...
+```
+
+当一个类型既实现了`Reader`，也实现了`Writer`，那么它便是`ReadWriter`，以此类推。
