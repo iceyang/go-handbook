@@ -191,3 +191,56 @@ type ReadWriteCloser interface {
 ```
 
 当一个类型既实现了`Reader`，也实现了`Writer`，那么它便是`ReadWriter`，以此类推。
+
+有了这个特性，我们在定义跟使用接口时也更为灵活，每一项特性都可以是一个小的`interface`，多个接口可以组合成新的接口。
+
+## 空接口
+
+空接口是指没有任何方法的接口，它是接口的特殊形式，所有类型都属于空接口。
+
+它类似于 Java 中的 Object，C语言的 void*，TypeScript 中的 any。有需要它的场景，但不能滥用。
+
+首先我们看看空接口可以怎么接收参数。
+
+```Go
+type Person struct {
+	name string
+}
+
+func show(entry interface{}) {
+	fmt.Println(entry)
+}
+
+func TestVoidInterface(t *testing.T) {
+	show(1)
+	show("Hello World")
+	show(Person{"Justin"})
+}
+
+// 执行结果
+// 
+// === RUN   TestVoidInterface
+// 1
+// Hello World
+// {Justin}
+// --- PASS: TestVoidInterface (0.00s)
+```
+
+我们定义了一个`show`函数，入参为`entry interface{}`，它可以接收任何参数并将其打印出来。
+
+那我们要怎么从空接口来获取具体类型？
+答案是 **使用断言**。
+
+比如：
+
+```Go
+var a interface{} = 100
+var b int = a.(int)
+fmt.Println(b)
+_, ok := a.(string)
+if !ok {
+        fmt.Println("a is not a string")
+}
+```
+
+记得断言可以有两个接收参数，第二个参数是判断是否转换成功用的。
