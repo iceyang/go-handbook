@@ -22,6 +22,10 @@ type Adult struct {
 	person Person
 }
 
+type Child struct {
+	Person
+}
+
 type AnonymousField struct {
 	a int
 	b int

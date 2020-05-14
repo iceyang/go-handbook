@@ -61,3 +61,14 @@ func TestStruct4(t *testing.T) {
 	adult.person.age = 25
 	fmt.Println(adult)
 }
+
+func TestPolymorphism(t *testing.T) {
+	child := Child{
+		Person{"child", 10},
+	}
+	var person Person
+	person = child.Person
+	// cannot use
+	// person = child
+	fmt.Println(person)
+}
