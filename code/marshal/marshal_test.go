@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"testing"
 
@@ -36,4 +37,13 @@ func TestBsonMarshal(t *testing.T) {
 	var stu2 Student
 	bson.Unmarshal(bytes, &stu2)
 	fmt.Println(stu2)
+}
+
+func TestXMLMarshal(t *testing.T) {
+	stu := &Student{
+		Person{"Justin"},
+		16,
+	}
+	bytes, _ := xml.Marshal(stu)
+	fmt.Printf("student: %s\n", bytes)
 }
