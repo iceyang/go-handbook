@@ -1,4 +1,4 @@
-The notes of my Golang learning.
+The notes of Golang.
 
 Catalog:
 
@@ -12,7 +12,9 @@ Basic Chapter
 * [Error Handling (1)](basic/07-1-error-handling.md)
 * [Struct](basic/08-struct.md)
 * [Interface](basic/09-interface.md)
+* [Polymorphism](basic/10-polymorphism.md)
 
 Application Chapter
 
 * [Building Web Service](application/01-building-webservice-with-gin.md)
+* [IoC Framework(TBD)]()
