@@ -10,6 +10,7 @@ Basic Chapter
 * [Goroutine](basic/04-goroutine.md)
 * [Goroutine With Channel](basic/05-goroutine-with-channel.md)
 * [Error Handling (1)](basic/07-1-error-handling.md)
+* [Error Handling (2)](basic/07-2-error-handling.md)
 * [Struct](basic/08-struct.md)
 * [Interface](basic/09-interface.md)
 * [Polymorphism](basic/10-polymorphism.md)
