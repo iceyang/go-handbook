@@ -38,6 +38,34 @@ fmt.Println(result)
 
 ### panic抛出
 
+通过 panic 抛出错误的方式，需要我们知道 Go panic/defer/recover 的机制，这里不累赘说明。
+怎么实现呢？
+
+1. 定义错误处理的defer方法
+2. 在方法中使用recover()
+3. 业务逻辑中panic出错误，就可以被recover捕捉
+
+现在我们有两个方法，一个是业务逻辑DoSomething，一个是错误恢复Recover，将它们组合起来，可以起到处理错误的功能：
+
+```Go
+func Recover() {
+	if err := recover(); err != nil {
+		log.Printf("%s\n", err)
+	}
+}
+
+func DoSomething() {
+	defer Recover()
+	log.Println("Here we go")
+	panic(errors.New("An error occurs"))
+	// unreachable code because of panic
+	log.Println("Here we go2")
+}
+```
+
+上面的方法我们是模拟了简单的业务处理。
+真实项目中，panic的方式能让我们统一错误处理，比如作为Web项目的中间件使用。
+
 ## 多Error处理
 ### 错误组合
 ### 链式执行
