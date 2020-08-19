@@ -49,17 +49,17 @@ fmt.Println(result)
 
 ```Go
 func Recover() {
-	if err := recover(); err != nil {
-		log.Printf("%s\n", err)
-	}
+        if err := recover(); err != nil {
+                log.Printf("%s\n", err)
+        }
 }
 
 func DoSomething() {
-	defer Recover()
-	log.Println("Here we go")
-	panic(errors.New("An error occurs"))
-	// unreachable code because of panic
-	log.Println("Here we go2")
+        defer Recover()
+        log.Println("Here we go")
+        panic(errors.New("An error occurs"))
+        // unreachable code because of panic
+        log.Println("Here we go2")
 }
 ```
 
@@ -67,9 +67,56 @@ func DoSomething() {
 真实项目中，panic的方式能让我们统一错误处理，比如作为Web项目的中间件使用。
 
 ## 多Error处理
-### 错误组合
-### 链式执行
+
+上面提到了Error最常见的返回方式是通过返回值传递，当我们采用这种方式时，会遇到另外一种问题，也是经常被吐槽的点，
+下面看一个具体的例子：
+
+```Go
+func foo() error {
+        err := doSomething1()
+        if err != nil {
+                return err
+        }
+        err = doSomething2()
+        if err != nil {
+                return err
+        }
+        err = doSomething3()
+        if err != nil {
+                return err
+        }
+        return nil
+}
+```
+
+典型的例子便是随处的`if err != nil`，`if`语句一用便是三行，让人难受。
+对于这种问题，我做一些简单的探讨。
+
 ### 批量处理
+
+还是用回上面的例子，假设`doSomething1`、`doSomething2`、`doSomething3`的结果相互之间不影响，也就是三个方法不是「事务」性操作，那么我们可以将返回的错误延迟到后面统一处理。
+
+```Go
+func dealErrors(errs ...error) error {
+        // 处理错误
+        return nil
+}
+
+func foo() error {
+        err1 := doSomething1()
+        err2 := doSomething2()
+        err3 := doSomething3()
+
+        err := dealErrors(err1, err2, err3)
+        return err
+}
+```
+
+因为3个方法之间互不影响，所以我们用方法`dealErrors`对它们返回的错误统一处理，具体处理方式由业务决定。
+
+### 错误组合
+
+### 链式执行
 
 ## 错误感知
 
