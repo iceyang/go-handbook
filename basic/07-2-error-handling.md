@@ -112,9 +112,48 @@ func foo() error {
 }
 ```
 
-因为3个方法之间互不影响，所以我们用方法`dealErrors`对它们返回的错误统一处理，具体处理方式由业务决定。
+因为3个方法之间互不影响，所以我们用方法`dealErrors`对它们返回的错误统一处理，`dealErrors`的具体处理方式由业务决定。
 
 ### 错误组合
+
+看到上面`dealErrors`的例子，因为没有给出具体实现，所以还是处于一种比较抽象的状态。
+对于这种情况，有一种很常见的处理方式，便是把错误组合起来返回。
+
+现在我们定义一个包，叫`multierr`，并提供方法：
+
+* func Combine(errors ...error) error
+* func Errors(err error) []error
+
+前者将错误组合起来变成一个新的error，后者可以将前者产生的error进行拆包。我们在这里不关注实现的细节，只关注它的行为。
+
+那么，现在针对上面的例子，我们可以这样写：
+
+```Go
+func foo() error {
+        return multierr.Combine(
+          doSomething1(),
+          doSomething2(),
+          doSomething3(),
+        )
+}
+
+func main() {
+        err := foo()
+        errors := multierr.Errors(err)
+        if len(errors) > 0 {
+                fmt.Println("The following errors occurred:")
+                for _, e := range errors {
+                        fmt.Println(e)
+                }
+        }
+}
+```
+
+在 foo 中，执行了三个逻辑方法，它们都可能产生错误，然后我们使用 multierr.Combine 将错误组合起来后返回。
+
+在 main 中，捕获 foo 返回的错误，并使用 multierr.Errors 进行拆包，假设有错误产生，便将他们输出打印。
+
+对于这个multierr包，实际上是 uber 的一个实现，有兴趣的可以查看 -> [multierr](https://github.com/uber-go/multierr)
 
 ### 链式执行
 
