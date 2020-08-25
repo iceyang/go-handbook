@@ -33,3 +33,32 @@ func TestMultiErr2(t *testing.T) {
 		}
 	}
 }
+
+type Handler func() error
+
+func Execute(handlers ...Handler) error {
+	for _, handler := range handlers {
+		if err := handler(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func TestMultiErr3(t *testing.T) {
+	err := Execute(
+		func() error {
+			fmt.Println("Here we are1")
+			return nil
+		},
+		func() error {
+			fmt.Println("Here we are2")
+			return errors.New("error occurs")
+		},
+		func() error {
+			fmt.Println("Here we are3")
+			return nil
+		},
+	)
+	fmt.Println(err)
+}

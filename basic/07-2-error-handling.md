@@ -157,6 +157,54 @@ func main() {
 
 ### 链式执行
 
+还是讨论上面的例子，我们使用了`mutierr.Combine(errors ...error)`，对多个错误进行了合并。`foo`中的三个逻辑方法，在调用Combine的时候，已经执行完毕，Combine只不过是对三个error进行处理。
+
+能这么做，是因为`foo`中的三个逻辑方法互不影响，假设三个方法是有顺序依赖的，或者说，一个方法执行失败，那后续的方法也没必要执行，这个时候我们或许可以这么做：
+
+我们定义一个多方法处理的函数Execute。
+
+```Go
+type Handler func() error
+
+func Execute(handlers ...Handler) error {
+	for _, handler := range handlers {
+		if err := handler(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func main() {
+	err := Execute(
+		func() error {
+			fmt.Println("Here we are1")
+			return nil
+		},
+		func() error {
+			fmt.Println("Here we are2")
+			return errors.New("error occurs")
+		},
+		func() error {
+			fmt.Println("Here we are3")
+			return nil
+		},
+	)
+	fmt.Println(err)
+}
+```
+
+上面的代码，简单的定义了一个`Handler`用于代表会返回一个`error`参数的方法，`Execute`则负责将批量的`Handler`进行执行。
+只要其中一个`Handler`产生了错误，那么执行链便会终止。
+
+运行上述代码，会看到，`Here we are3`没有输出，因为它并不会被执行。
+
+> 在这里，其实还有很多讨论的空间。比如说，那链式调用，上下文怎么办，后边的方法经常会依赖到前边方法的返回值。
+>
+> Go 对于错误作为返回值的处理，其实跟JavaScript的回调处理十分相似，也是约定俗成的错误返回。
+>
+> 因为这里只是展示错误处理的一种可能性，所以如果对这种方式有兴趣，不妨看看js非常有名的 [async](https://github.com/caolan/async) 包，可以说是非常经典的一个工具了。
+
 ## 错误感知
 
 ## 错误堆栈

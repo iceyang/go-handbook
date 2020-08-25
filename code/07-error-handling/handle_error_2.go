@@ -21,6 +21,7 @@ func handleErrorWithType2(err error) {
 }
 
 func doSomething2() error {
+	rand.Seed(time.Now().UnixNano())
 	num := rand.Intn(10)
 	if num > 5 {
 		return errorOne
@@ -31,7 +32,6 @@ func doSomething2() error {
 }
 
 func handleErrorDemo2() {
-	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < 10; i++ {
 		if err := doSomething2(); err != nil {

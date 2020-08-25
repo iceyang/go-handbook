@@ -9,6 +9,7 @@ import (
 )
 
 func doSomething3() error {
+	rand.Seed(time.Now().UnixNano())
 	num := rand.Intn(10)
 	if num > 5 {
 		return &ErrorOne{}
@@ -33,8 +34,6 @@ func handleErrorWithType3(err error) {
 }
 
 func handleErrorDemo3() {
-	rand.Seed(time.Now().UnixNano())
-
 	for i := 0; i < 10; i++ {
 		if err := doSomething3(); err != nil {
 			handleErrorWithType3(err)
