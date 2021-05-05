@@ -165,6 +165,27 @@ func TestAppendTrap(t *testing.T) {
 	// slice18 := slice16[:11] // 这里会产生越界错误
 }
 
+func TestAppendTrap2(t *testing.T) {
+	s1 := []int{1, 2, 3}
+	s2 := s1[1:]
+	s2[1] = 4
+	s2 = append(s2, 5, 6, 7)
+	t.Log("s1:", s1)
+	t.Log("s2:", s2)
+}
+
+func TestAppendTrap3(t *testing.T) {
+	s1 := make([]int, 3, 6)
+	s1[0], s1[1] = 1, 2
+	s2 := s1[1:]
+	s2[0] = 4
+	// t.Logf("len(s2):%d, cap(s2):%d\n", len(s2), cap(s2))
+	s2 = append(s2, 6)
+	s2[1] = 5
+	t.Log("s1:", append(s1, 7))
+	t.Log("s2:", s2)
+}
+
 /**
  * Slice传入函数中，是传引用
  */

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
@@ -27,17 +28,18 @@ func TestWaitGroup1(t *testing.T) {
  */
 func TestWaitGroup2(t *testing.T) {
 	var wg sync.WaitGroup
+	var counter int32
 	n := 1000
-	counter := 0
 	for i := 0; i < n; i++ {
-		wg.Add(1)
 		go func(i int) {
-			counter++
+			wg.Add(1)
+			atomic.AddInt32(&counter, 1)
+			// counter += 1 // Dangerous!!
 			wg.Done()
 		}(i)
 	}
 	wg.Wait()
-	if counter != n {
+	if int(counter) != n {
 		t.Errorf("Not all goroutine is finished. counter=%d，expected %d", counter, n)
 	}
 }
