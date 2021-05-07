@@ -3,21 +3,24 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"testing"
 	"time"
 
 	"golang.org/x/sync/errgroup"
 )
 
-// ctx, cancel := context.WithTimeout(context.Background())
-func TestErrGroup(t *testing.T) {
+// 即使出错了也会跑完所有任务
+func TestErrGroup1(t *testing.T) {
 	group, _ := errgroup.WithContext(context.Background())
 	for i := 0; i < 5; i++ {
 		index := i
 		group.Go(func() error {
-			fmt.Printf("do somethings %d\n", index)
 			time.Sleep(time.Duration(index) * time.Second)
 			fmt.Printf("finished:%d\n", index)
+			if rand.Intn(100) > 50 {
+				return fmt.Errorf("an error occurs: %d", index)
+			}
 			return nil
 		})
 	}
@@ -26,35 +29,51 @@ func TestErrGroup(t *testing.T) {
 	}
 }
 
+// 可以感知到错误而停止其他任务
+func TestErrGroupWithCancel(t *testing.T) {
+	group, ctx := errgroup.WithContext(context.Background())
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 5; i++ {
+		index := i
+		sleepTime := rand.Intn(5)
+		group.Go(func() error {
+			select {
+			case <-time.After(time.Duration(sleepTime) * time.Second):
+				fmt.Printf("finished:%d\n", index)
+				if rand.Intn(100) > 50 {
+					return fmt.Errorf("an error occurs: %d", index)
+				}
+			case <-ctx.Done():
+				return ctx.Err()
+			}
+			return nil
+		})
+	}
+	if err := group.Wait(); err != nil {
+		fmt.Println(err)
+	}
+}
+
+// 超时中断
 func TestErrGroupWithTimeout(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
-	group, _ := errgroup.WithContext(ctx)
 	defer cancel()
-
-	doSomething := func(sleepTime time.Duration, errChan chan<- error) {
-		// 模拟耗时操作
-		time.Sleep(sleepTime)
-		errChan <- nil
-	}
-
+	group, ctx := errgroup.WithContext(ctx)
 	for i := 0; i < 10; i++ {
-		fn := func(ctx context.Context, index int) func() error {
-			return func() error {
-				errChan := make(chan error)
-				go doSomething(time.Duration(index)*time.Second, errChan)
-				for {
-					select {
-					case <-ctx.Done():
-						fmt.Printf("canceled:%d\n", index)
-						return ctx.Err()
-					case err := <-errChan:
-						fmt.Printf("finished:%d\n", index)
-						return err
-					}
-				}
+		index := i
+		group.Go(func() error {
+			errChan := make(chan error)
+			defer close(errChan)
+			select {
+			case <-ctx.Done():
+				fmt.Printf("canceled:%d\n", index)
+				return ctx.Err()
+			case <-time.After(time.Duration(index) * time.Second):
+				// 模拟耗时操作
+				fmt.Printf("finished:%d\n", index)
+				return nil
 			}
-		}
-		group.Go(fn(ctx, i))
+		})
 	}
 	if err := group.Wait(); err != nil {
 		fmt.Println(err)
