@@ -1,4 +1,4 @@
-# errgroup - 捕获 goroutine的错误
+# errgroup - 捕获 goroutine 的错误
 
 在`Go`里面，想要让程序并发运行是一件很简单的事情，只要在func执行的时候，加上`go`关键字便实现了。 
 但同时又引入了另外一个问题，`go`执行我们捕获不到错误信息。
@@ -121,3 +121,13 @@ func TestErrGroupWithTimeout(t *testing.T) {
 	}
 }
 ```
+
+## 总结
+
+我们介绍了`errgroup`如何捕获到`goroutine`的错误。
+同时介绍通过上下文，可以让`goroutine`获取`cancel`状态，另外如果需要超时控制，则在`context`创建之时，给与`WithTimeout`即可。
+
+总体来讲，官方包提供的`errgoup`还是比较轻量级，对于上下文的处理，可能还是需要使用者花多点功夫。
+另外`Wait()`方法返回的只是第一个错误，有时可能依旧满足不了需求，需要加于扩展。
+
+本文的具体代码可以在 [此处](../code/sync) 获得。
