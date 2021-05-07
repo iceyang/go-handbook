@@ -6,14 +6,18 @@ Basic Chapter
 
 * [Array & Slice](basic/01-array-slice.md)
 * [Map](basic/02-map.md)
-* [Channel](basic/03-channel.md)
-* [Goroutine](basic/04-goroutine.md)
-* [Goroutine With Channel](basic/05-goroutine-with-channel.md)
-* [Error Handling (1)](basic/07-1-error-handling.md)
-* [Error Handling (2)](basic/07-2-error-handling.md)
-* [Struct](basic/08-struct.md)
-* [Interface](basic/09-interface.md)
-* [Polymorphism](basic/10-polymorphism.md)
+* [Struct](basic/03-struct.md)
+* [Interface](basic/04-interface.md)
+* [Polymorphism](basic/05-polymorphism.md)
+* [Error Handling (1)](basic/06-error-handling1.md)
+* [Error Handling (2)](basic/07-error-handling2.md)
+
+Advanced Chapter
+
+* [Channel](advanced/01-channel.md)
+* [Goroutine](advanced/02-goroutine.md)
+* [Goroutine With Channel](advanced/03-goroutine-with-channel.md)
+* [errgroup - Catch Goroutine error](advanced/05-sync-errgroup.md)
 
 Application Chapter
 

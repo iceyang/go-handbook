@@ -10,18 +10,23 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+func doSomethings(index int) error {
+	rand.Seed(time.Now().UnixNano())
+	fmt.Printf("Job[%d] finished\n", index)
+	if rand.Intn(5) >= 4 {
+		return fmt.Errorf("an error occurs: %d", index)
+	}
+	return nil
+}
+
 // 即使出错了也会跑完所有任务
 func TestErrGroup1(t *testing.T) {
 	group, _ := errgroup.WithContext(context.Background())
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		index := i
 		group.Go(func() error {
 			time.Sleep(time.Duration(index) * time.Second)
-			fmt.Printf("finished:%d\n", index)
-			if rand.Intn(100) > 50 {
-				return fmt.Errorf("an error occurs: %d", index)
-			}
-			return nil
+			return doSomethings(index)
 		})
 	}
 	if err := group.Wait(); err != nil {
@@ -32,21 +37,17 @@ func TestErrGroup1(t *testing.T) {
 // 可以感知到错误而停止其他任务
 func TestErrGroupWithCancel(t *testing.T) {
 	group, ctx := errgroup.WithContext(context.Background())
-	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < 5; i++ {
 		index := i
+		rand.Seed(time.Now().UnixNano())
 		sleepTime := rand.Intn(5)
 		group.Go(func() error {
 			select {
 			case <-time.After(time.Duration(sleepTime) * time.Second):
-				fmt.Printf("finished:%d\n", index)
-				if rand.Intn(100) > 50 {
-					return fmt.Errorf("an error occurs: %d", index)
-				}
+				return doSomethings(index)
 			case <-ctx.Done():
 				return ctx.Err()
 			}
-			return nil
 		})
 	}
 	if err := group.Wait(); err != nil {
@@ -62,16 +63,14 @@ func TestErrGroupWithTimeout(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		index := i
 		group.Go(func() error {
-			errChan := make(chan error)
-			defer close(errChan)
 			select {
-			case <-ctx.Done():
-				fmt.Printf("canceled:%d\n", index)
-				return ctx.Err()
 			case <-time.After(time.Duration(index) * time.Second):
 				// 模拟耗时操作
 				fmt.Printf("finished:%d\n", index)
 				return nil
+			case <-ctx.Done():
+				fmt.Printf("canceled:%d\n", index)
+				return ctx.Err()
 			}
 		})
 	}
